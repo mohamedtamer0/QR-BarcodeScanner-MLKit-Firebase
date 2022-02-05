@@ -12,8 +12,6 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -35,8 +33,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
 
     private val TAG = "MyTag"
-    lateinit var inputImage: InputImage
-    lateinit var barcodeScanner: BarcodeScanner
+    private lateinit var inputImage: InputImage
+    private lateinit var barcodeScanner: BarcodeScanner
 
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,34 +45,26 @@ class MainActivity : AppCompatActivity() {
         barcodeScanner = BarcodeScanning.getClient()
 
         cameraLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(),
-            object : ActivityResultCallback<ActivityResult> {
-                override fun onActivityResult(result: ActivityResult?) {
-                    val data = result?.data
-                    try {
-                        val photo = data?.extras?.get("data") as Bitmap
-                        inputImage = InputImage.fromBitmap(photo, 0)
-                        processQr()
-                    } catch (e: Exception) {
-                        Log.d(TAG, "onActivityResult: " + e.message)
-                    }
-                }
-
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            val data = result?.data
+            try {
+                val photo = data?.extras?.get("data") as Bitmap
+                inputImage = InputImage.fromBitmap(photo, 0)
+                processQr()
+            } catch (e: Exception) {
+                Log.d(TAG, "onActivityResult: " + e.message)
             }
-        )
+        }
 
 
         galleryLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(),
-            object : ActivityResultCallback<ActivityResult> {
-                override fun onActivityResult(result: ActivityResult?) {
-                    val data = result?.data
-                    inputImage = InputImage.fromFilePath(this@MainActivity, data?.data!!)
-                    processQr()
-                }
-
-            }
-        )
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            val data = result?.data
+            inputImage = InputImage.fromFilePath(this@MainActivity, data?.data!!)
+            processQr()
+        }
 
 
 
@@ -84,7 +74,7 @@ class MainActivity : AppCompatActivity() {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Pick a option")
 
-            builder.setItems(options, DialogInterface.OnClickListener { dialog, which ->
+            builder.setItems(options, DialogInterface.OnClickListener { _, which ->
                 if (which == 0) {
                     val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     cameraLauncher.launch(cameraIntent)
@@ -117,16 +107,16 @@ class MainActivity : AppCompatActivity() {
                         val password = barcode.wifi!!.password
                         val type = barcode.wifi!!.encryptionType
 
-                        binding.tvResult.text = "ssid ${ssid} \n password ${password} \n type ${type}"
+                        binding.tvResult.text = "ssid $ssid \n password $password \n type $type"
                     }
                     Barcode.TYPE_URL -> {
                         val title = barcode.url!!.title
                         val url = barcode.url!!.url
-                        binding.tvResult.text = "title ${title} \n url ${url}"
+                        binding.tvResult.text = "title $title \n url $url"
                     }
                     Barcode.TYPE_URL -> {
                         val data = barcode.displayValue
-                        binding.tvResult.text = "Result ${data}}"
+                        binding.tvResult.text = "Result $data"
                     }
                 }
 
