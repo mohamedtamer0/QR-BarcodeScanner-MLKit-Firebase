@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "916630432959",
+    "firebase_url": "https://quiz-982c6.firebaseio.com",
+    "project_id": "quiz-982c6",
+    "storage_bucket": "quiz-982c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916630432959:android:fdfcabfd5a8985a3dd6a0a",
+        "android_client_info": {
+          "package_name": "com.example.qr_barcodescanner_mlkit_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916630432959-4m7q4sre295q0hbfbe2jce7n3kn7cee4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACafrH_RJzMJglMdQnu040u4FCIA0og0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916630432959-4m7q4sre295q0hbfbe2jce7n3kn7cee4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
